@@ -5,12 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Intel: Sustainability Through the Ages</title>
   <style>
-    /* Intel Brand Colors */
+    /* Intel Brand Colors & Base Styles */
     :root {
       --intel-blue: #0071c5;
       --intel-dark-blue: #003865;
       --intel-white: #ffffff;
       --intel-light-gray: #f2f2f2;
+      --intel-dark-gray: #333333;
+      --card-shadow: 0 4px 12px rgba(0, 65, 117, 0.15);
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: var(--intel-dark-gray);
     }
     
     /* Header Styles */
@@ -41,7 +55,6 @@
       font-weight: 700;
       margin-bottom: 1rem;
       line-height: 1.2;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
     
     header p {
@@ -52,27 +65,152 @@
       opacity: 0.9;
     }
     
-    /* Decorative elements */
-    header::before {
-      content: "";
+    /* Timeline Container */
+    .timeline-container {
+      max-width: 1200px;
+      margin: 3rem auto;
+      padding: 0 2rem;
+    }
+    
+    .timeline-scroll-message {
+      text-align: center;
+      color: var(--intel-blue);
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      display: none;
+    }
+    
+    /* Timeline Styles */
+    .timeline {
+      display: flex;
+      gap: 1.5rem;
+      padding: 1rem 0;
+      overflow-x: auto;
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* IE */
+    }
+    
+    .timeline::-webkit-scrollbar {
+      display: none; /* Chrome/Safari */
+    }
+    
+    /* Milestone Cards */
+    .milestone {
+      flex: 0 0 300px;
+      background: var(--intel-white);
+      border-radius: 8px;
+      box-shadow: var(--card-shadow);
+      overflow: hidden;
+      transition: all 0.3s ease;
+      position: relative;
+      min-height: 400px;
+    }
+    
+    .milestone-content {
+      padding: 1.5rem;
+      position: relative;
+      z-index: 2;
+      background: var(--intel-white);
+      transition: all 0.3s ease;
+    }
+    
+    .milestone h2 {
+      color: var(--intel-blue);
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .milestone h3 {
+      color: var(--intel-dark-blue);
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+    
+    .milestone img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-bottom: 3px solid var(--intel-blue);
+    }
+    
+    .milestone p {
+      color: var(--intel-dark-gray);
+      margin-bottom: 1rem;
+    }
+    
+    .milestone-hover {
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
       bottom: 0;
-      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" fill="none" opacity="0.05"><path d="M50 0L100 50L50 100L0 50L50 0Z" stroke="white"/></svg>');
-      background-size: 80px;
-      opacity: 0.1;
-      z-index: 1;
+      background: rgba(0, 113, 197, 0.9);
+      color: var(--intel-white);
+      padding: 2rem;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
     
-    /* Timeline image styles */
-    img[src$=".jpg"] {
-      width: 250px;
-      height: 100px;
-      object-fit: cover;
-      border-radius: 4px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    .milestone-hover h3 {
+      color: var(--intel-white);
+      margin-bottom: 1rem;
+    }
+    
+    .milestone:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 65, 117, 0.2);
+    }
+    
+    .milestone:hover .milestone-content {
+      opacity: 0;
+    }
+    
+    .milestone:hover .milestone-hover {
+      opacity: 1;
+    }
+    
+    /* Responsive Layout */
+    @media (max-width: 768px) {
+      .timeline {
+        flex-direction: column;
+        overflow-x: visible;
+        gap: 2rem;
+      }
+      
+      .milestone {
+        flex: 1 1 auto;
+        min-height: auto;
+      }
+      
+      .timeline-scroll-message {
+        display: none;
+      }
+      
+      header h1 {
+        font-size: 2rem;
+      }
+      
+      header p {
+        font-size: 1rem;
+      }
+    }
+    
+    @media (min-width: 769px) {
+      .timeline-scroll-message {
+        display: block;
+      }
+    }
+    
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      background: var(--intel-light-gray);
+      color: var(--intel-dark-blue);
     }
   </style>
 </head>
@@ -81,14 +219,10 @@
   <!-- Header / Hero Section -->
   <header>
     <div>
-      <!-- Intel Logo -->
       <img src="img/intel-header-logo.svg" alt="Intel Logo" />
-      <!-- Main Heading -->
       <h1>
         Sustainability Through the Ages
       </h1>
-
-      <!-- Subheading / Description -->
       <p>
         Explore Intel's journey through time, discovering how our commitment
         to innovation has shaped a more sustainable future for technology 
@@ -97,118 +231,159 @@
     </div>
   </header>
 
-  <!-- Timeline Cards Section -->
-  <section>
-    <!-- Card 1: 1968 -->
-    <div>
-      <h2>1968</h2>
-      <h3>Intel Founded</h3>
-      <img src="img/1.jpg" alt="Intel founders Robert Noyce and Gordon Moore" />
-      <p>
-        Robert Noyce and Gordon Moore rename the newly formed company 
-        NM Electronics to Intel Corporation, laying the foundation for 
-        decades of technological innovation.
-      </p>
-    </div>
+  <!-- Timeline Section -->
+  <div class="timeline-container">
+    <p class="timeline-scroll-message">← Scroll horizontally to view timeline →</p>
+    
+    <div class="timeline">
+      <!-- Milestone 1: 1968 -->
+      <div class="milestone">
+        <img src="img/1.jpg" alt="Intel founders Robert Noyce and Gordon Moore" />
+        <div class="milestone-content">
+          <h2>1968</h2>
+          <h3>Intel Founded</h3>
+          <p>
+            Robert Noyce and Gordon Moore rename NM Electronics to Intel Corporation...
+          </p>
+        </div>
+        <div class="milestone-hover">
+          <h3>Intel Founded</h3>
+          <p>Robert Noyce and Gordon Moore rename the newly formed company NM Electronics to Intel Corporation, laying the foundation for decades of technological innovation and sustainable business practices.</p>
+        </div>
+      </div>
 
-    <!-- Card 2: 1971 -->
-    <div>
-      <h2>1971</h2>
-      <h3>First Microprocessor</h3>
-      <img src="img/2.jpg" alt="Intel 4004 microprocessor" />
-      <p>
-        Intel debuts the 4004, the world's first commercial microprocessor, 
-        igniting the microprocessor revolution and propelling the future 
-        of computing devices.
-      </p>
-    </div>
+      <!-- Milestone 2: 1971 -->
+      <div class="milestone">
+        <img src="img/2.jpg" alt="Intel 4004 microprocessor" />
+        <div class="milestone-content">
+          <h2>1971</h2>
+          <h3>First Microprocessor</h3>
+          <p>
+            Intel debuts the 4004, the world's first commercial microprocessor...
+          </p>
+        </div>
+        <div class="milestone-hover">
+          <h3>First Microprocessor</h3>
+          <p>Intel debuts the 4004, the world's first commercial microprocessor, igniting the microprocessor revolution. This innovation would eventually lead to energy-efficient computing solutions worldwide.</p>
+        </div>
+      </div>
 
-    <!-- Card 3: 1978 -->
-    <div>
-      <h2>1978</h2>
-      <h3>8086 Processor</h3>
-      <img src="img/3.jpg" alt="Intel 8086 processor" />
-      <p>
-        Launch of the 8086 processor, establishing the x86 architecture 
-        that drives countless PCs and servers in the modern era.
-      </p>
-    </div>
+      <!-- Milestone 3: 1978 -->
+      <div class="milestone">
+        <img src="img/3.jpg" alt="Intel 8086 processor" />
+        <div class="milestone-content">
+          <h2>1978</h2>
+          <h3>8086 Processor</h3>
+          <p>
+            Launch of the 8086 processor, establishing the x86 architecture...
+          </p>
+        </div>
+        <div class="milestone-hover">
+          <h3>8086 Processor</h3>
+          <p>The 8086 processor establishes the x86 architecture that would drive countless PCs and servers. Intel begins implementing more efficient manufacturing processes to reduce environmental impact.</p>
+        </div>
+      </div>
 
-    <!-- Card 4: 1985 -->
-    <div>
-      <h2>1985</h2>
-      <h3>386 Processor</h3>
-      <img src="img/4.jpg" alt="Intel 386 processor" />
-      <p>
-        Intel introduces the 386 processor with 32-bit architecture, 
-        ushering in a new era of performance and multitasking for 
-        personal computers.
-      </p>
-    </div>
+      <!-- Milestone 4: 1985 -->
+      <div class="milestone">
+        <img src="img/4.jpg" alt="Intel 386 processor" />
+        <div class="milestone-content">
+          <h2>1985</h2>
+          <h3>386 Processor</h3>
+          <p>
+            Intel introduces the 386 processor with 32-bit architecture...
+          </p>
+        </div>
+        <div class="milestone-hover">
+          <h3>386 Processor</h3>
+          <p>Intel introduces the 386 processor with 32-bit architecture, ushering in a new era of performance. The company begins formal environmental policies at its manufacturing sites.</p>
+        </div>
+      </div>
 
-    <!-- Card 5: 2006 -->
-    <div>
-      <h2>2006</h2>
-      <h3>Peak GHG Emissions</h3>
-      <img src="img/5.jpg" alt="Intel factory with sustainability metrics" />
-      <p>
-        This year marks Intel's highest annual greenhouse gas emissions 
-        for operations. Over subsequent years, Intel invests heavily in 
-        chemical abatement, renewable energy, and energy-efficient 
-        manufacturing to reverse this trend.
-      </p>
-    </div>
+      <!-- Milestone 5: 2006 -->
+      <div class="milestone">
+        <img src="img/5.jpg" alt="Intel factory with sustainability metrics" />
+        <div class="milestone-content">
+          <h2>2006</h2>
+          <h3>Peak GHG Emissions</h3>
+          <p>
+            This year marks Intel's highest annual greenhouse gas emissions...
+          </p>
+        </div>
+        <div class="milestone-hover">
+          <h3>Turning Point</h3>
+          <p>After reaching peak emissions, Intel initiates aggressive reduction programs, investing in chemical abatement, renewable energy, and energy-efficient manufacturing processes.</p>
+        </div>
+      </div>
 
-    <!-- Card 6: 2020 -->
-    <div>
-      <h2>2020</h2>
-      <h3>RISE Strategy</h3>
-      <img src="img/6.jpg" alt="Intel RISE strategy graphic" />
-      <p>
-        Intel launches its RISE (Responsible, Inclusive, Sustainable, 
-        Enabling) strategy and 2030 goals, aiming to drive industry-wide 
-        progress on climate action, water stewardship, and waste reduction.
-      </p>
-    </div>
+      <!-- Milestone 6: 2020 -->
+      <div class="milestone">
+        <img src="img/6.jpg" alt="Intel RISE strategy graphic" />
+        <div class="milestone-content">
+          <h2>2020</h2>
+          <h3>RISE Strategy</h3>
+          <p>
+            Intel launches its RISE strategy and 2030 goals...
+          </p>
+        </div>
+        <div class="milestone-hover">
+          <h3>RISE Strategy</h3>
+          <p>Intel's RISE (Responsible, Inclusive, Sustainable, Enabling) strategy sets ambitious 2030 goals for climate action, water stewardship, and waste reduction across the semiconductor industry.</p>
+        </div>
+      </div>
 
-    <!-- Card 7: 2022 -->
-    <div>
-      <h2>2022</h2>
-      <h3>Net-Zero By 2040</h3>
-      <img src="img/7.jpg" alt="Net zero commitment graphic" />
-      <p>
-        Intel announces its commitment to achieve net-zero greenhouse 
-        gas emissions (Scope 1 and 2) across its global operations 
-        by 2040, building on years of environmental initiatives.
-      </p>
-    </div>
+      <!-- Milestone 7: 2022 -->
+      <div class="milestone">
+        <img src="img/7.jpg" alt="Net zero commitment graphic" />
+        <div class="milestone-content">
+          <h2>2022</h2>
+          <h3>Net-Zero By 2040</h3>
+          <p>
+            Intel announces its commitment to achieve net-zero...
+          </p>
+        </div>
+        <div class="milestone-hover">
+          <h3>Net-Zero Commitment</h3>
+          <p>Intel pledges to achieve net-zero greenhouse gas emissions across global operations by 2040, with interim 2030 targets for renewable energy and process improvements.</p>
+        </div>
+      </div>
 
-    <!-- Card 8: 2023 -->
-    <div>
-      <h2>2023</h2>
-      <h3>Renewable Electricity</h3>
-      <img src="img/8.jpg" alt="Solar panels at Intel facility" />
-      <p>
-        The company achieves 99% renewable electricity usage worldwide, 
-        helping to drastically lower carbon emissions and driving progress 
-        toward Intel's long-term sustainability goals.
-      </p>
-    </div>
+      <!-- Milestone 8: 2023 -->
+      <div class="milestone">
+        <img src="img/8.jpg" alt="Solar panels at Intel facility" />
+        <div class="milestone-content">
+          <h2>2023</h2>
+          <h3>Renewable Electricity</h3>
+          <p>
+            The company achieves 99% renewable electricity usage...
+          </p>
+        </div>
+        <div class="milestone-hover">
+          <h3>Renewable Milestone</h3>
+          <p>Intel reaches 99% renewable electricity usage worldwide through power purchase agreements, on-site generation, and renewable energy credits.</p>
+        </div>
+      </div>
 
-    <!-- Card 9: 2024 -->
-    <div>
-      <h2>2024</h2>
-      <h3>Sustainability Summit</h3>
-      <img src="img/9.jpg" alt="Intel Sustainability Summit event" />
-      <p>
-        Intel hosts its first Sustainability Summit, uniting suppliers, 
-        government officials, and industry leaders to collaborate on 
-        next-generation sustainable semiconductor manufacturing.
-      </p>
+      <!-- Milestone 9: 2024 -->
+      <div class="milestone">
+        <img src="img/9.jpg" alt="Intel Sustainability Summit event" />
+        <div class="milestone-content">
+          <h2>2024</h2>
+          <h3>Sustainability Summit</h3>
+          <p>
+            Intel hosts its first Sustainability Summit...
+          </p>
+        </div>
+        <div class="milestone-hover">
+          <h3>Collaborative Future</h3>
+          <p>The inaugural Sustainability Summit brings together suppliers, government officials, and industry leaders to accelerate sustainable semiconductor manufacturing innovations.</p>
+        </div>
+      </div>
     </div>
-  </section>
-  <p style="text-align: center; color: var(--intel-dark-blue); padding: 1rem; font-size: 0.9rem;">
-    Scroll to view timeline | Hover over cards to learn more!
-  </p>
+  </div>
+
+  <footer>
+    <p>Intel Corporation | Sustainability Through Innovation</p>
+  </footer>
 </body>
 </html>
